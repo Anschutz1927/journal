@@ -13,7 +13,7 @@ public class DataBaseWorker extends SQLiteOpenHelper{
     private static final String DB_NAME = "journal";
     private static final int VERSION = 1;
 
-    private static final String TABLE_MAGAZIEN = "Magazine";
+    private static final String TABLE_MAGAZINE = "Magazine";
     public static final String COLUMN_MAGAZINE_ID = "MagazineId";
     public static final String COLUMN_NAME = "Name";
     public static final String COLUMN_IS_DOWNLOADED = "IsDownloaded";
@@ -83,10 +83,15 @@ public class DataBaseWorker extends SQLiteOpenHelper{
         return getReadableDatabase().rawQuery(sql, null);
     }
 
+    public Cursor getJournals() {
+        return getReadableDatabase()
+                .query(TABLE_MAGAZINE, null, null, null, null, null, COLUMN_MAGAZINE_ID);
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql;
-        sql = "CREATE TABLE " + TABLE_MAGAZIEN + " (" +
+        sql = "CREATE TABLE " + TABLE_MAGAZINE + " (" +
                 COLUMN_MAGAZINE_ID +" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE," +
                 COLUMN_NAME + " TEXT NOT NULL," +
                 COLUMN_IS_DOWNLOADED + " BLOB NOT NULL DEFAULT 0," +

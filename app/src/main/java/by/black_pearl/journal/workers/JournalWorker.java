@@ -103,6 +103,66 @@ public class JournalWorker {
         return jTest;
     }
 
+    public ArrayList<Journal> getJournals() {
+        Cursor c = mDataBaseWorker.getJournals();
+        if(c.getCount() == 0) {
+            return null;
+        }
+        ArrayList<Journal> listJournals = new ArrayList<>();
+        int idIndex = c.getColumnIndex(DataBaseWorker.COLUMN_MAGAZINE_ID);
+        int nameIndex = c.getColumnIndex(DataBaseWorker.COLUMN_NAME);
+        int isDownloadedIndex = c.getColumnIndex(DataBaseWorker.COLUMN_IS_DOWNLOADED);
+        int posterIndex = c.getColumnIndex(DataBaseWorker.COLUMN_POSTER_IMAGE);
+        int htmlIndex = c.getColumnIndex(DataBaseWorker.COLUMN_HTML_PATH);
+        c.moveToFirst();
+        do {
+            Journal journal = new Journal(c.getInt(idIndex), c.getString(nameIndex));
+            if(c.getInt(isDownloadedIndex) == 1) {
+                journal.setJournalDownloaded(c.getString(posterIndex), c.getString(htmlIndex));
+            }
+            listJournals.add(journal);
+        }
+        while(c.moveToNext());
+        return listJournals;
+    }
+
+    /**
+     * By black_pearl-net.
+     */
+    public class Journal {
+        private int mMagazineId;
+        private String mMagazineName;
+        private boolean mIsDownloaded = false;
+        private String mPosterImage = null;
+        private String mHtmlPath = null;
+
+        /**
+         * Container for one journal.
+         * @param id magazine (journal) id.
+         * @param name name of magazine (journal).
+         */
+        public Journal(int id, String name) {
+            this.mMagazineId = id;
+            this.mMagazineName = name;
+
+        }
+
+        /**
+         * Call this method to set "is_downloaded" paramether to true and
+         * set paths to image and html page.
+         * @param posterImagePath path of image (poster).
+         * @param htmlPath path of html page.
+         */
+        public void setJournalDownloaded(String posterImagePath, String htmlPath) {
+            this.mIsDownloaded = true;
+            this.mPosterImage = posterImagePath;
+            this.mHtmlPath = htmlPath;
+        }
+    }
+
+    /**
+     * By black_pearl-net.
+     */
     public class JournalTest {
         private static final String DEFAUL_IMAGE_PATH = "default";
         private ArrayList<String> mQuestions;
