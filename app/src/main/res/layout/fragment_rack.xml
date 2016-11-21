@@ -1,0 +1,50 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="by.black_pearl.journal.fragments.RackFragment"
+    android:id="@+id/frameLayout">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rackLayout">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:text="Download/Read"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/downloadReadButton"
+                android:textAllCaps="false"
+                android:layout_marginStart="75dp"
+                android:layout_marginEnd="35dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp" />
+        </FrameLayout>
+
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/gridView"
+            android:numColumns="3"
+            android:verticalSpacing="10dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No item"
+        android:textSize="30sp"
+        android:textStyle="normal|bold"
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
+</FrameLayout>

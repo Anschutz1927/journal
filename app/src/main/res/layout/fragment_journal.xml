@@ -1,0 +1,39 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="by.black_pearl.journal.fragments.LastJournalFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/posterLayot">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:text="Look in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lookInJournalButton"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="30dp"
+            android:textAllCaps="false" />
+
+        <Button
+            android:text="Other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/otherJournalButton"
+            android:layout_margin="30dp"
+            android:layout_gravity="bottom|left"
+            android:textAllCaps="false" />
+    </FrameLayout>
+
+</FrameLayout>

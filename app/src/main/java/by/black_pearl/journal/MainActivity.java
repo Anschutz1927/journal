@@ -1,9 +1,9 @@
 package by.black_pearl.journal;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,10 +11,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
+import by.black_pearl.journal.fragments.CardsFragment;
+import by.black_pearl.journal.fragments.RackFragment;
+import by.black_pearl.journal.fragments.TestsFragment;
+import by.black_pearl.journal.workers.JournalWorker;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String LAST_FRAGMENT = "lastfragment";
+
+    private int mLastFragment = 0;
+    private JournalWorker mJournalWorker;
+
+    public MainActivity() {
+        this.mJournalWorker = new JournalWorker(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +34,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -40,6 +43,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        startActivity(new Intent(this, JournalActivity.class));
     }
 
     @Override
@@ -77,25 +82,80 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch (item.getItemId()) {
+            case R.id.nav_rack:
+                beginFragmentReplace(0);
+                break;
+            case R.id.nav_tests:
+                beginFragmentReplace(1);
+                break;
+            case R.id.nav_cards:
+                beginFragmentReplace(2);
+                break;
+            default:
+                beginFragmentReplace(0);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        this.mLastFragment = savedInstanceState.getInt(LAST_FRAGMENT, 0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        beginFragmentReplace(mLastFragment);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(LAST_FRAGMENT, mLastFragment);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    private void beginFragmentReplace(int id) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        switch (id) {
+            case 0:
+                fragmentTransaction.replace(R.id.content_main, RackFragment.newInstance());
+                mLastFragment = 0;
+                break;
+            case 1:
+                fragmentTransaction.replace(R.id.content_main, TestsFragment.newInstance());
+                mLastFragment = 1;
+                break;
+            case 2:
+                fragmentTransaction.replace(R.id.content_main, CardsFragment.newInstance());
+                mLastFragment = 2;
+                break;
+            default:
+                fragmentTransaction.replace(R.id.content_main, RackFragment.newInstance());
+                mLastFragment = 0;
+                break;
+        }
+        fragmentTransaction.commit();
+    }
+
+    public JournalWorker getJournalWorker() {
+        return mJournalWorker;
+    }
+
+    public interface MainActivityInterface {
+        void call();
     }
 }
